@@ -79,6 +79,30 @@
   .student-hero h1{font-family:'Tajawal',sans-serif;font-size:32px;font-weight:900;margin-bottom:8px;
     background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
   .student-hero p{color:var(--muted);font-size:15px;}
+
+  /* ── Exam Type Selector ── */
+  .exam-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+  .exam-type-btn{
+    background:var(--card);border:2px solid var(--border);border-radius:16px;
+    padding:28px 16px;cursor:pointer;text-align:center;transition:all .25s;
+    color:var(--text);font-family:'Cairo',sans-serif;font-size:16px;font-weight:700;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+  }
+  .exam-type-btn .exam-icon{font-size:36px;line-height:1;}
+  .exam-type-btn:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.3);}
+  .exam-type-btn.type-practical{border-color:rgba(59,130,246,.3);}
+  .exam-type-btn.type-practical:hover,.exam-type-btn.type-practical.selected{
+    border-color:var(--accent);background:rgba(59,130,246,.1);color:var(--accent);
+    box-shadow:0 8px 28px rgba(59,130,246,.25);}
+  .exam-type-btn.type-oral{border-color:rgba(139,92,246,.3);}
+  .exam-type-btn.type-oral:hover,.exam-type-btn.type-oral.selected{
+    border-color:var(--accent2);background:rgba(139,92,246,.1);color:var(--accent2);
+    box-shadow:0 8px 28px rgba(139,92,246,.25);}
+  .exam-type-btn.type-hospital{border-color:rgba(16,185,129,.3);}
+  .exam-type-btn.type-hospital:hover,.exam-type-btn.type-hospital.selected{
+    border-color:var(--success);background:rgba(16,185,129,.1);color:var(--success);
+    box-shadow:0 8px 28px rgba(16,185,129,.25);}
+
   .subjects-selector{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:24px;}
   .subject-btn{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:18px 16px;cursor:pointer;
     text-align:center;transition:all .2s;color:var(--text);font-family:'Cairo',sans-serif;font-size:15px;font-weight:600;}
@@ -133,13 +157,27 @@
   .modal{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;width:90%;max-width:480px;animation:fadeIn .2s ease;}
   .modal h3{font-family:'Tajawal',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px;}
   .section-divider{height:1px;background:var(--border);margin:24px 0;}
-  .breadcrumb{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;margin-bottom:20px;}
+  .breadcrumb{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;margin-bottom:20px;flex-wrap:wrap;}
   .breadcrumb span{color:var(--text);font-weight:600;}
   #saving-bar{display:none;position:fixed;top:0;left:0;right:0;height:3px;
     background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:9998;}
   #saving-bar.show{display:block;}
+
+  /* exam type badge in breadcrumb */
+  .exam-badge{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:4px;}
+  .exam-badge.practical{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);}
+  .exam-badge.oral{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--accent2);}
+  .exam-badge.hospital{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--success);}
+
+  /* exam type badge in response card */
+  .resp-exam-badge{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
+  .resp-exam-badge.practical{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);}
+  .resp-exam-badge.oral{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--accent2);}
+  .resp-exam-badge.hospital{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--success);}
+
   @media(max-width:600px){
     header{padding:14px 20px;} .view{padding:24px 16px;}
+    .exam-type-grid{grid-template-columns:1fr;}
     .subjects-selector{grid-template-columns:repeat(2,1fr);}
     .stats-bar{grid-template-columns:repeat(2,1fr);}
     .subject-header{flex-direction:column;align-items:flex-start;}
@@ -155,7 +193,7 @@
 <div id="saving-bar"></div>
 
 <header>
-  <div class="logo">📋  FOP1 تجميع أسئلة العملي</div>
+  <div class="logo">📋  FOP1 تجميع أسئلة الامتحانات</div>
   <div class="header-actions">
     <div class="cloud-badge"><div class="dot"></div>Firebase</div>
     <button class="admin-toggle" onclick="showAdminGate()">⚙️ المشرف</button>
@@ -167,20 +205,43 @@
 <div id="view-student" class="view active">
   <div class="student-hero">
     <h1>شاركنا </h1>
-    <p>اختر المادة والدكتور واكتب الاسئلة </p>
+    <p>اختر نوع الامتحان ثم المادة والدكتور واكتب الاسئلة</p>
     <p>الـــصــــيـــــاد ماتنساش تدعي لجدّي بالرحمة</p>
   </div>
   <div id="survey-form">
-    <div class="step-label"><span class="step-num">1</span> اختر المادة</div>
-    <div class="subjects-selector" id="student-subjects"></div>
+
+    <!-- STEP 0: Exam Type -->
+    <div class="step-label"><span class="step-num">1</span> اختر نوع الامتحان</div>
+    <div class="exam-type-grid">
+      <button class="exam-type-btn type-practical" onclick="selectExamType('practical','🔬 عملي',this)">
+        <span class="exam-icon">🔬</span>عملي
+      </button>
+      <button class="exam-type-btn type-oral" onclick="selectExamType('oral','🎤 شفوي',this)">
+        <span class="exam-icon">🎤</span>شفوي
+      </button>
+      <button class="exam-type-btn type-hospital" onclick="selectExamType('hospital','🏥 مستشفى',this)">
+        <span class="exam-icon">🏥</span>مستشفى
+      </button>
+    </div>
+
+    <!-- STEP 1: Subject (was step 1, now step 2) -->
+    <div id="step1" style="display:none">
+      <div class="section-divider"></div>
+      <div class="step-label"><span class="step-num">2</span> اختر المادة</div>
+      <div class="subjects-selector" id="student-subjects"></div>
+    </div>
+
+    <!-- STEP 2: Doctor -->
     <div id="step2" style="display:none">
       <div class="section-divider"></div>
-      <div class="step-label"><span class="step-num">2</span> اختر الدكتور</div>
+      <div class="step-label"><span class="step-num">3</span> اختر الدكتور</div>
       <div class="doctors-selector" id="student-doctors"></div>
     </div>
+
+    <!-- STEP 3: Text -->
     <div id="step3" style="display:none">
       <div class="section-divider"></div>
-      <div class="step-label"><span class="step-num">3</span> اكتب ملاحظتك</div>
+      <div class="step-label"><span class="step-num">4</span> اكتب ملاحظتك</div>
       <div id="breadcrumb-display" class="breadcrumb"></div>
       <textarea class="feedback-box" id="student-feedback" placeholder="اكتب السؤال ..."></textarea>
       <div class="submit-section">
@@ -188,6 +249,7 @@
         <button class="btn-submit" onclick="submitFeedback()">إرسال ✓</button>
       </div>
     </div>
+
   </div>
   <div class="success-msg" id="success-msg">
     <span class="icon">🎉</span>
@@ -235,6 +297,15 @@
     <div class="subjects-grid" id="admin-subjects"></div>
   </div>
   <div id="tab-responses" class="tab-content" style="display:none">
+    <div class="form-group">
+      <label>تصفية حسب نوع الامتحان</label>
+      <select id="filter-examtype" onchange="renderResponses()">
+        <option value="">كل الأنواع</option>
+        <option value="practical">🔬 عملي</option>
+        <option value="oral">🎤 شفوي</option>
+        <option value="hospital">🏥 مستشفى</option>
+      </select>
+    </div>
     <div class="form-group">
       <label>تصفية حسب المادة</label>
       <select id="filter-subject" onchange="populateFilterDropdowns();renderResponses()"><option value="">كل المواد</option></select>
@@ -314,6 +385,18 @@ const CONFIG_REF = doc(db, "config", "main");
 let _subjects  = [];
 let _responses = [];
 let _pin       = "1980";
+
+// exam type labels
+const EXAM_LABELS = {
+  practical: '🔬 عملي',
+  oral:      '🎤 شفوي',
+  hospital:  '🏥 مستشفى'
+};
+const EXAM_CLASS = {
+  practical: 'practical',
+  oral:      'oral',
+  hospital:  'hospital'
+};
 
 // ═══════════════════════════════════════════════════════════
 //  Firebase helpers
@@ -409,6 +492,9 @@ function renderAdmin(){
     <div class="stat-card"><div class="num">${_subjects.length}</div><div class="lbl">مادة</div></div>
     <div class="stat-card"><div class="num">${_subjects.reduce((a,s)=>a+s.doctors.length,0)}</div><div class="lbl">دكتور</div></div>
     <div class="stat-card"><div class="num">${_responses.length}</div><div class="lbl">إجابة</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--accent)">${_responses.filter(r=>r.examType==='practical').length}</div><div class="lbl">🔬 عملي</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--accent2)">${_responses.filter(r=>r.examType==='oral').length}</div><div class="lbl">🎤 شفوي</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--success)">${_responses.filter(r=>r.examType==='hospital').length}</div><div class="lbl">🏥 مستشفى</div></div>
   `;
   const c=document.getElementById("admin-subjects");
   if(!_subjects.length){ c.innerHTML='<div class="empty"><span class="icon">📭</span>لا توجد مواد. أضف أولى!</div>'; return; }
@@ -538,9 +624,11 @@ function populateFilters(){
 window.populateFilterDropdowns = populateFilters;
 
 function renderResponses(){
+  const ef=document.getElementById("filter-examtype").value;
   const sf=document.getElementById("filter-subject").value;
   const df=document.getElementById("filter-doctor").value;
   let resp=[..._responses];
+  if(ef) resp=resp.filter(r=>r.examType===ef);
   if(sf) resp=resp.filter(r=>r.subjectId===sf);
   if(df) resp=resp.filter(r=>r.doctorId===df);
   const area=document.getElementById("responses-area");
@@ -552,8 +640,11 @@ function renderResponses(){
     const sub=_subjects.find(s=>s.id===r.subjectId);
     const d=sub?.doctors.find(d=>d.id===r.doctorId);
     const ts=r.ts ? new Date(r.ts.seconds?r.ts.seconds*1000:r.ts).toLocaleString('ar-EG') : '';
+    const examLabel=EXAM_LABELS[r.examType]||r.examType||'—';
+    const examCls=EXAM_CLASS[r.examType]||'';
     return `<div class="response-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+        <span class="resp-exam-badge ${examCls}">${examLabel}</span>
         <span style="background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">${sub?.icon||''} ${sub?.name||'مادة محذوفة'}</span>
         <span style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--accent2);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">👤 ${d?.name||'دكتور محذوف'}</span>
       </div>
@@ -565,17 +656,20 @@ function renderResponses(){
 window.renderResponses = renderResponses;
 
 window.exportCSV = ()=>{
+  const ef=document.getElementById("filter-examtype").value;
   const sf=document.getElementById("filter-subject").value;
   const df=document.getElementById("filter-doctor").value;
   let resp=[..._responses];
+  if(ef) resp=resp.filter(r=>r.examType===ef);
   if(sf) resp=resp.filter(r=>r.subjectId===sf);
   if(df) resp=resp.filter(r=>r.doctorId===df);
-  const rows=[['المادة','الدكتور','الإجابة','التاريخ']];
+  const rows=[['نوع الامتحان','المادة','الدكتور','الإجابة','التاريخ']];
   resp.forEach(r=>{
     const sub=_subjects.find(s=>s.id===r.subjectId);
     const d=sub?.doctors.find(d=>d.id===r.doctorId);
     const ts=r.ts?new Date(r.ts.seconds?r.ts.seconds*1000:r.ts).toLocaleString('ar-EG'):'';
-    rows.push([sub?.name||'—',d?.name||'—',r.text.replace(/,/g,'،').replace(/\n/g,' '),ts]);
+    const examLabel=EXAM_LABELS[r.examType]||r.examType||'—';
+    rows.push([examLabel,sub?.name||'—',d?.name||'—',r.text.replace(/,/g,'،').replace(/\n/g,' '),ts]);
   });
   const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
   const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),download:'نتائج_الموقع.csv'});
@@ -611,9 +705,33 @@ window.confirmClearAll = async ()=>{
 // ═══════════════════════════════════════════════════════════
 //  Student view
 // ═══════════════════════════════════════════════════════════
+let selExamType=null, selExamLabel=null;
 let selSubId=null, selDocId=null;
 
+// Step 0 — exam type
+window.selectExamType = (type, label, btn)=>{
+  selExamType=type; selExamLabel=label;
+  selSubId=null; selDocId=null;
+  document.querySelectorAll(".exam-type-btn").forEach(b=>b.classList.remove("selected"));
+  btn.classList.add("selected");
+  document.getElementById("step1").style.display="block";
+  document.getElementById("step2").style.display="none";
+  document.getElementById("step3").style.display="none";
+  renderStudentSubjects();
+  document.getElementById("step1").scrollIntoView({behavior:"smooth",block:"nearest"});
+};
+
 function renderStudentView(){
+  // just reset; subjects rendered after exam type chosen
+  selExamType=null; selSubId=null; selDocId=null;
+  document.getElementById("step1").style.display="none";
+  document.getElementById("step2").style.display="none";
+  document.getElementById("step3").style.display="none";
+  document.querySelectorAll(".exam-type-btn").forEach(b=>b.classList.remove("selected"));
+}
+window.renderStudentView = renderStudentView;
+
+function renderStudentSubjects(){
   const c=document.getElementById("student-subjects");
   if(!_subjects.length){
     c.innerHTML='<div style="color:var(--muted);font-size:14px;padding:16px 0">لا توجد مواد بعد — انتظر المشرف.</div>';
@@ -624,7 +742,6 @@ function renderStudentView(){
       <span class="subject-icon">${s.icon||'📚'}</span>${s.name}
     </button>`).join("");
 }
-window.renderStudentView = renderStudentView;
 
 window.selectSubject = (subId,btn)=>{
   selSubId=subId; selDocId=null;
@@ -646,8 +763,10 @@ window.selectDoctor = (docId,btn)=>{
   btn.classList.add("selected");
   const sub=_subjects.find(s=>s.id===selSubId);
   const d=sub?.doctors.find(d=>d.id===docId);
+  const examCls=EXAM_CLASS[selExamType]||'';
   document.getElementById("breadcrumb-display").innerHTML=
-    `${sub?.icon||''} <strong>${sub?.name}</strong> ← <span>👤 ${d?.name}</span>`;
+    `<span class="exam-badge ${examCls}">${selExamLabel||''}</span>
+     ${sub?.icon||''} <strong>${sub?.name}</strong> ← <span>👤 ${d?.name}</span>`;
   document.getElementById("step3").style.display="block";
   document.getElementById("student-feedback").value="";
   document.getElementById("step3").scrollIntoView({behavior:"smooth",block:"nearest"});
@@ -655,14 +774,15 @@ window.selectDoctor = (docId,btn)=>{
 
 window.submitFeedback = async ()=>{
   const text=document.getElementById("student-feedback").value.trim();
-  if(!selSubId||!selDocId) return showToast("اختر المادة والدكتور أولاً","error");
-  if(!text)                return showToast("اكتب ملاحظتك أولاً","error");
+  if(!selExamType)             return showToast("اختر نوع الامتحان أولاً","error");
+  if(!selSubId||!selDocId)     return showToast("اختر المادة والدكتور أولاً","error");
+  if(!text)                    return showToast("اكتب ملاحظتك أولاً","error");
   bar(true);
   try{
     const ref=await addDoc(collection(db,"responses"),{
-      subjectId:selSubId, doctorId:selDocId, text, ts:new Date()
+      examType:selExamType, subjectId:selSubId, doctorId:selDocId, text, ts:new Date()
     });
-    _responses.unshift({id:ref.id,subjectId:selSubId,doctorId:selDocId,text,ts:new Date()});
+    _responses.unshift({id:ref.id,examType:selExamType,subjectId:selSubId,doctorId:selDocId,text,ts:new Date()});
     document.getElementById("survey-form").style.display="none";
     document.getElementById("success-msg").style.display="block";
   }catch(e){
@@ -673,13 +793,14 @@ window.submitFeedback = async ()=>{
 };
 
 window.resetForm = ()=>{
-  selSubId=null; selDocId=null;
+  selExamType=null; selSubId=null; selDocId=null;
   document.getElementById("survey-form").style.display="block";
   document.getElementById("success-msg").style.display="none";
+  document.getElementById("step1").style.display="none";
   document.getElementById("step2").style.display="none";
   document.getElementById("step3").style.display="none";
   document.getElementById("student-feedback").value="";
-  renderStudentView();
+  document.querySelectorAll(".exam-type-btn").forEach(b=>b.classList.remove("selected"));
   window.scrollTo({top:0,behavior:"smooth"});
 };
 
@@ -689,7 +810,6 @@ window.resetForm = ()=>{
 (async()=>{
   await loadAll();
   document.getElementById("loading-screen").style.display="none";
-  renderStudentView();
 })();
 </script>
 </body>
