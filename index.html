@@ -21,7 +21,9 @@
     background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
   .cloud-badge{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--success);
     padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;}
+  .cloud-badge.error-badge{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:var(--danger);}
   .cloud-badge .dot{width:6px;height:6px;background:var(--success);border-radius:50%;animation:pulse 2s infinite;}
+  .cloud-badge.error-badge .dot{background:var(--danger);animation:none;}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
   .header-actions{display:flex;align-items:center;gap:12px;}
   .admin-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);padding:8px 16px;
@@ -35,7 +37,19 @@
   .spinner{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--accent);
     border-radius:50%;animation:spin .8s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .loading-text{font-family:'Tajawal',sans-serif;font-size:16px;color:var(--muted);}
+  .loading-text{font-family:'Tajawal',sans-serif;font-size:16px;color:var(--muted);text-align:center;max-width:320px;}
+  .error-screen{display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;max-width:440px;padding:24px;}
+  .error-screen .eicon{font-size:56px;}
+  .error-screen h2{font-family:'Tajawal',sans-serif;font-size:22px;color:var(--danger);}
+  .error-screen p{color:var(--muted);font-size:14px;line-height:1.8;}
+  .error-screen code{background:var(--surface);border:1px solid var(--border);border-radius:8px;
+    padding:10px 16px;font-size:11px;color:#f87171;display:block;text-align:left;direction:ltr;
+    word-break:break-all;max-width:100%;overflow:auto;margin-top:4px;}
+  .steps-hint{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;
+    text-align:right;font-size:13px;line-height:2;color:var(--text);width:100%;}
+  .steps-hint b{color:var(--accent);}
+  .retry-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:white;
+    padding:12px 28px;border-radius:10px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px;}
   .gate-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:48px;max-width:400px;margin:80px auto;}
   .gate-box h2{font-family:'Tajawal',sans-serif;font-size:22px;margin-bottom:8px;color:var(--gold);}
   .gate-box p{color:var(--muted);font-size:14px;margin-bottom:28px;}
@@ -134,7 +148,6 @@
   .modal h3{font-family:'Tajawal',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px;}
   .section-divider{height:1px;background:var(--border);margin:24px 0;}
   .breadcrumb{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;margin-bottom:20px;}
-  .breadcrumb span{color:var(--text);font-weight:600;}
   #saving-bar{display:none;position:fixed;top:0;left:0;right:0;height:3px;
     background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:9998;}
   #saving-bar.show{display:block;}
@@ -149,15 +162,31 @@
 <body>
 
 <div id="loading-screen">
-  <div class="spinner"></div>
-  <div class="loading-text">جاري الاتصال بـ Firebase...</div>
+  <div class="spinner" id="spinner"></div>
+  <div class="loading-text" id="loading-text">جاري الاتصال بـ Firebase...</div>
+  <div class="error-screen" id="error-screen">
+    <span class="eicon">⚠️</span>
+    <h2>فشل الاتصال</h2>
+    <p id="error-msg">تعذر الاتصال بقاعدة البيانات.</p>
+    <code id="error-code"></code>
+    <div class="steps-hint">
+      <b>الحل الأكثر شيوعاً — Firestore Rules:</b><br>
+      1. افتح <b>console.firebase.google.com</b><br>
+      2. Firestore Database ← <b>Rules</b><br>
+      3. غير <code style="background:none;border:none;padding:0;color:#f87171">allow read, write: if false</code><br>
+      &nbsp;&nbsp;&nbsp;إلى <code style="background:none;border:none;padding:0;color:#34d399">allow read, write: if true</code><br>
+      4. اضغط <b>Publish</b> ثم أعد التحميل
+    </div>
+    <button class="retry-btn" onclick="location.reload()">🔄 إعادة المحاولة</button>
+  </div>
 </div>
+
 <div id="saving-bar"></div>
 
 <header>
   <div class="logo">📋 تجميع أسئلة العملي</div>
   <div class="header-actions">
-    <div class="cloud-badge"><div class="dot"></div>Firebase</div>
+    <div class="cloud-badge" id="cloud-badge"><div class="dot"></div>Firebase</div>
     <button class="admin-toggle" onclick="showAdminGate()">⚙️ المشرف</button>
   </div>
 </header>
@@ -166,8 +195,8 @@
 <!-- STUDENT -->
 <div id="view-student" class="view active">
   <div class="student-hero">
-    <h1>شاركنا </h1>
-    <p>اختر المادة والدكتور واكتب الاسئلة </p>
+    <h1>شاركنا</h1>
+    <p>اختر المادة والدكتور واكتب الأسئلة</p>
     <p>الـــصــــيـــــاد ماتنساش تدعي لجدّي بالرحمة</p>
   </div>
   <div id="survey-form">
@@ -288,17 +317,17 @@
 
 <script type="module">
 // ═══════════════════════════════════════════════════════════
-//  Firebase Imports (CDN)
+//  Firebase CDN Imports — v10 stable
 // ═══════════════════════════════════════════════════════════
 import { initializeApp }
-  from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, doc, getDoc,
          getDocs, setDoc, addDoc, writeBatch,
          query, orderBy }
-  from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ═══════════════════════════════════════════════════════════
-//  Firebase Config
+//  Your Firebase Config
 // ═══════════════════════════════════════════════════════════
 const firebaseConfig = {
   apiKey:            "AIzaSyBxaLoYyw0oa17isuWnPFckUtl2mmvKUCE",
@@ -306,49 +335,88 @@ const firebaseConfig = {
   projectId:         "project-4698821164569783235",
   storageBucket:     "project-4698821164569783235.firebasestorage.app",
   messagingSenderId: "999988406776",
-  appId:             "1:999988406776:web:14f914304b81b025648e0d",
-  measurementId:     "G-SSQQ1WEKDK"
+  appId:             "1:999988406776:web:14f914304b81b025648e0d"
 };
 
-const app        = initializeApp(firebaseConfig);
-const db         = getFirestore(app);
-const CONFIG_REF = doc(db, "config", "main");
+// ═══════════════════════════════════════════════════════════
+//  Init Firebase
+// ═══════════════════════════════════════════════════════════
+let db, CONFIG_REF;
+try {
+  const app = initializeApp(firebaseConfig);
+  db         = getFirestore(app);
+  CONFIG_REF = doc(db, "config", "main");
+} catch(e) {
+  showErrorUI("فشل تهيئة Firebase — تحقق من الـ config", e);
+}
 
 // ═══════════════════════════════════════════════════════════
-//  In-memory state
+//  State
 // ═══════════════════════════════════════════════════════════
 let _subjects  = [];
 let _responses = [];
 let _pin       = "1980";
 
 // ═══════════════════════════════════════════════════════════
-//  Firebase helpers
+//  Error UI
 // ═══════════════════════════════════════════════════════════
-function bar(on){ document.getElementById("saving-bar").classList.toggle("show",on); }
+function showErrorUI(msg, err){
+  document.getElementById("spinner").style.display      = "none";
+  document.getElementById("loading-text").style.display = "none";
+  document.getElementById("error-screen").style.display = "flex";
+  document.getElementById("error-msg").textContent      = msg;
+  document.getElementById("error-code").textContent     = err?.code
+    ? `[${err.code}] ${err.message}`
+    : (err?.message || String(err));
+  const badge = document.getElementById("cloud-badge");
+  badge.classList.add("error-badge");
+  badge.innerHTML = '<div class="dot"></div>خطأ في الاتصال';
+  console.error("Firebase Error:", err);
+}
 
+// ═══════════════════════════════════════════════════════════
+//  Helpers
+// ═══════════════════════════════════════════════════════════
+function bar(on){ document.getElementById("saving-bar").classList.toggle("show", on); }
+function setLoadTxt(t){ document.getElementById("loading-text").textContent = t; }
+
+// ═══════════════════════════════════════════════════════════
+//  Load all data
+// ═══════════════════════════════════════════════════════════
 async function loadAll(){
   bar(true);
   try {
+    setLoadTxt("جاري تحميل الإعدادات...");
     const snap = await getDoc(CONFIG_REF);
     if(snap.exists()){
       _subjects = snap.data().subjects || [];
       _pin      = snap.data().pin      || "1980";
     } else {
-      await setDoc(CONFIG_REF,{pin:"1980",subjects:[]});
+      setLoadTxt("إنشاء قاعدة البيانات للمرة الأولى...");
+      await setDoc(CONFIG_REF, { pin:"1980", subjects:[] });
     }
-    const q     = query(collection(db,"responses"), orderBy("ts","desc"));
-    const snap2 = await getDocs(q);
+    setLoadTxt("جاري تحميل الإجابات...");
+    const snap2 = await getDocs(query(collection(db,"responses"), orderBy("ts","desc")));
     _responses  = snap2.docs.map(d=>({id:d.id,...d.data()}));
-  } catch(e){
-    console.error(e);
-    showToast("خطأ في الاتصال بـ Firebase","error");
+  } catch(e) {
+    let msg = "تعذر الاتصال بقاعدة البيانات.";
+    if(e.code === "permission-denied")
+      msg = "🔒 الصلاحيات مغلقة — غيّر Firestore Rules إلى: allow read, write: if true";
+    else if(e.code === "unavailable")
+      msg = "📡 الخادم غير متاح — تحقق من اتصال الإنترنت.";
+    else if(e.code === "not-found")
+      msg = "❌ المشروع غير موجود — تحقق من projectId في الـ config.";
+    showErrorUI(msg, e);
+    bar(false);
+    return false;
   }
   bar(false);
+  return true;
 }
 
 async function saveConfig(){
   bar(true);
-  await setDoc(CONFIG_REF,{pin:_pin, subjects:_subjects});
+  await setDoc(CONFIG_REF, { pin:_pin, subjects:_subjects });
   bar(false);
 }
 
@@ -356,14 +424,14 @@ async function saveConfig(){
 //  Toast
 // ═══════════════════════════════════════════════════════════
 function showToast(msg, type="success"){
-  const t=document.getElementById("toast");
-  t.textContent=msg; t.className="show "+type;
-  clearTimeout(t._t); t._t=setTimeout(()=>t.className="",2800);
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.className = "show " + type;
+  clearTimeout(t._t); t._t = setTimeout(()=>t.className="", 2800);
 }
 window.showToast = showToast;
 
 // ═══════════════════════════════════════════════════════════
-//  Views
+//  View switching
 // ═══════════════════════════════════════════════════════════
 function showView(id){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
@@ -374,25 +442,20 @@ window.showView = showView;
 window.showAdminGate = ()=>{
   ["p1","p2","p3","p4"].forEach(i=>document.getElementById(i).value="");
   showView("view-admin-gate");
-  setTimeout(()=>document.getElementById("p1").focus(),60);
+  setTimeout(()=>document.getElementById("p1").focus(), 60);
 };
-
-window.moveFocus    = (el,next)=>{ if(el.value&&next) document.getElementById(next).focus(); };
+window.moveFocus    = (el,next)=>{ if(el.value && next) document.getElementById(next).focus(); };
 window.handlePinKey = e=>{ if(e.key==="Enter") window.checkPin(); };
 
 window.checkPin = async ()=>{
-  const entered=["p1","p2","p3","p4"].map(i=>document.getElementById(i).value).join("");
-  try{
-    const s=await getDoc(CONFIG_REF);
-    if(s.exists()) _pin=s.data().pin||"1980";
-  }catch(e){}
-  if(entered===_pin){
-    showView("view-admin");
-    renderAdmin();
+  const entered = ["p1","p2","p3","p4"].map(i=>document.getElementById(i).value).join("");
+  try{ const s=await getDoc(CONFIG_REF); if(s.exists()) _pin=s.data().pin||"1980"; }catch(e){}
+  if(entered === _pin){
+    showView("view-admin"); renderAdmin();
   } else {
     showToast("رمز PIN غير صحيح","error");
     ["p1","p2","p3","p4"].forEach(i=>document.getElementById(i).value="");
-    setTimeout(()=>document.getElementById("p1").focus(),60);
+    setTimeout(()=>document.getElementById("p1").focus(), 60);
   }
 };
 
@@ -408,7 +471,7 @@ window.switchTab = (tabId,btn)=>{
 };
 
 // ═══════════════════════════════════════════════════════════
-//  Admin panel
+//  Admin render
 // ═══════════════════════════════════════════════════════════
 function renderAdmin(){
   document.getElementById("admin-stats").innerHTML=`
@@ -416,10 +479,10 @@ function renderAdmin(){
     <div class="stat-card"><div class="num">${_subjects.reduce((a,s)=>a+s.doctors.length,0)}</div><div class="lbl">دكتور</div></div>
     <div class="stat-card"><div class="num">${_responses.length}</div><div class="lbl">إجابة</div></div>
   `;
-  const c=document.getElementById("admin-subjects");
+  const c = document.getElementById("admin-subjects");
   if(!_subjects.length){ c.innerHTML='<div class="empty"><span class="icon">📭</span>لا توجد مواد. أضف أولى!</div>'; return; }
-  c.innerHTML=_subjects.map(sub=>{
-    const cnt=_responses.filter(r=>r.subjectId===sub.id).length;
+  c.innerHTML = _subjects.map(sub=>{
+    const cnt = _responses.filter(r=>r.subjectId===sub.id).length;
     return `<div class="subject-card">
       <div class="subject-header">
         <div style="display:flex;align-items:center;gap:10px;flex:1">
@@ -442,8 +505,7 @@ function renderAdmin(){
               <span class="doctor-response-count">${dc} إجابة</span>
               <button class="btn btn-danger" onclick="deleteDoctor('${sub.id}','${d.id}')">حذف</button>
             </div>`;
-          }).join('')
-        }
+          }).join('')}
       </div>
     </div>`;
   }).join("");
@@ -451,13 +513,11 @@ function renderAdmin(){
 
 window.reloadAll = async ()=>{
   showToast("جاري التحديث...","success");
-  await loadAll();
-  renderAdmin();
-  renderStudentView();
+  await loadAll(); renderAdmin(); renderStudentView();
 };
 
 // ═══════════════════════════════════════════════════════════
-//  Add / Delete subjects & doctors
+//  CRUD — Subjects & Doctors
 // ═══════════════════════════════════════════════════════════
 window.openAddSubject = ()=>{
   document.getElementById("new-subject-name").value="";
@@ -470,9 +530,7 @@ window.addSubject = async ()=>{
   const icon=document.getElementById("new-subject-icon").value.trim()||"📚";
   if(!name) return showToast("اكتب اسم المادة","error");
   _subjects.push({id:"sub_"+Date.now(),name,icon,doctors:[]});
-  await saveConfig();
-  closeModal("modal-subject");
-  renderAdmin(); renderStudentView();
+  await saveConfig(); closeModal("modal-subject"); renderAdmin(); renderStudentView();
   showToast("تمت إضافة المادة ✓");
 };
 window.deleteSubject = async subId=>{
@@ -485,9 +543,7 @@ window.deleteSubject = async subId=>{
     await batch.commit();
     _responses=_responses.filter(r=>r.subjectId!==subId);
   }
-  await saveConfig();
-  renderAdmin(); renderStudentView();
-  showToast("تم الحذف");
+  await saveConfig(); renderAdmin(); renderStudentView(); showToast("تم الحذف");
 };
 window.openAddDoctor = subId=>{
   document.getElementById("doctor-subject-id").value=subId;
@@ -502,9 +558,7 @@ window.addDoctor = async ()=>{
   const sub=_subjects.find(s=>s.id===subId);
   if(!sub) return;
   sub.doctors.push({id:"doc_"+Date.now(),name});
-  await saveConfig();
-  closeModal("modal-doctor");
-  renderAdmin(); renderStudentView();
+  await saveConfig(); closeModal("modal-doctor"); renderAdmin(); renderStudentView();
   showToast("تمت إضافة الدكتور ✓");
 };
 window.deleteDoctor = async (subId,docId)=>{
@@ -518,13 +572,11 @@ window.deleteDoctor = async (subId,docId)=>{
     await batch.commit();
     _responses=_responses.filter(r=>!(r.subjectId===subId&&r.doctorId===docId));
   }
-  await saveConfig();
-  renderAdmin(); renderStudentView();
-  showToast("تم الحذف");
+  await saveConfig(); renderAdmin(); renderStudentView(); showToast("تم الحذف");
 };
 window.closeModal = id=>document.getElementById(id).classList.remove("open");
 document.querySelectorAll(".modal-overlay").forEach(el=>
-  el.addEventListener("click",e=>{if(e.target===el)el.classList.remove("open");}));
+  el.addEventListener("click",e=>{ if(e.target===el) el.classList.remove("open"); }));
 
 // ═══════════════════════════════════════════════════════════
 //  Responses
@@ -557,7 +609,7 @@ function renderResponses(){
   </div>`+resp.map(r=>{
     const sub=_subjects.find(s=>s.id===r.subjectId);
     const d=sub?.doctors.find(d=>d.id===r.doctorId);
-    const ts=r.ts ? new Date(r.ts.seconds?r.ts.seconds*1000:r.ts).toLocaleString('ar-EG') : '';
+    const ts=r.ts?new Date(r.ts.seconds?r.ts.seconds*1000:r.ts).toLocaleString('ar-EG'):'';
     return `<div class="response-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
         <span style="background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">${sub?.icon||''} ${sub?.name||'مادة محذوفة'}</span>
@@ -584,7 +636,10 @@ window.exportCSV = ()=>{
     rows.push([sub?.name||'—',d?.name||'—',r.text.replace(/,/g,'،').replace(/\n/g,' '),ts]);
   });
   const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
-  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),download:'نتائج_الموقع.csv'});
+  const a=Object.assign(document.createElement('a'),{
+    href:URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),
+    download:'نتائج_الموقع.csv'
+  });
   a.click(); showToast('تم التصدير ✓');
 };
 
@@ -593,25 +648,21 @@ window.exportCSV = ()=>{
 // ═══════════════════════════════════════════════════════════
 window.changePin = async ()=>{
   const cur=document.getElementById("current-pin").value;
-  const np=document.getElementById("new-pin").value;
-  const cp=document.getElementById("confirm-pin").value;
-  if(cur!==_pin)   return showToast("الرمز الحالي غير صحيح","error");
-  if(np.length<4)  return showToast("الرمز يجب أن يكون 4 أرقام","error");
-  if(np!==cp)      return showToast("الرمزان لا يتطابقان","error");
-  _pin=np;
-  await saveConfig();
+  const np =document.getElementById("new-pin").value;
+  const cp =document.getElementById("confirm-pin").value;
+  if(cur!==_pin)  return showToast("الرمز الحالي غير صحيح","error");
+  if(np.length<4) return showToast("الرمز يجب أن يكون 4 أرقام","error");
+  if(np!==cp)     return showToast("الرمزان لا يتطابقان","error");
+  _pin=np; await saveConfig();
   ["current-pin","new-pin","confirm-pin"].forEach(i=>document.getElementById(i).value="");
   showToast("تم تغيير الرمز ✓");
 };
-
 window.confirmClearAll = async ()=>{
   if(!confirm("مسح كل الإجابات نهائياً؟")) return;
   const batch=writeBatch(db);
   _responses.forEach(r=>batch.delete(doc(db,"responses",r.id)));
   await batch.commit();
-  _responses=[];
-  renderAdmin();
-  showToast("تم المسح");
+  _responses=[]; renderAdmin(); showToast("تم المسح");
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -639,10 +690,10 @@ window.selectSubject = (subId,btn)=>{
   const sub=_subjects.find(s=>s.id===subId);
   document.getElementById("step2").style.display="block";
   document.getElementById("step3").style.display="none";
-  const dc=document.getElementById("student-doctors");
-  dc.innerHTML=(!sub||!sub.doctors.length)
-    ?'<div style="color:var(--muted);font-size:13px">لا يوجد دكاترة في هذه المادة</div>'
-    :sub.doctors.map(d=>`<button class="doctor-btn" onclick="selectDoctor('${d.id}',this)">👤 ${d.name}</button>`).join("");
+  document.getElementById("student-doctors").innerHTML=
+    (!sub||!sub.doctors.length)
+      ?'<div style="color:var(--muted);font-size:13px">لا يوجد دكاترة في هذه المادة</div>'
+      :sub.doctors.map(d=>`<button class="doctor-btn" onclick="selectDoctor('${d.id}',this)">👤 ${d.name}</button>`).join("");
   document.getElementById("step2").scrollIntoView({behavior:"smooth",block:"nearest"});
 };
 
@@ -690,10 +741,11 @@ window.resetForm = ()=>{
 };
 
 // ═══════════════════════════════════════════════════════════
-//  INIT
+//  BOOT
 // ═══════════════════════════════════════════════════════════
 (async()=>{
-  await loadAll();
+  const ok = await loadAll();
+  if(!ok) return; // error screen is already visible
   document.getElementById("loading-screen").style.display="none";
   renderStudentView();
 })();
