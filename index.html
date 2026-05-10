@@ -51,7 +51,7 @@
   .btn-ghost:hover{background:var(--card);border-color:var(--accent);}
   .btn-danger{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--danger);font-size:12px;padding:6px 12px;}
   .btn-danger:hover{background:rgba(239,68,68,.2);}
-  .btn-success{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--success);font-size:13px;padding:8px 16px;}
+  .btn-success{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--success);font-size:13px;padding:8px 16px;}
   .btn-add{background:rgba(59,130,246,.1);border:1px dashed var(--accent);color:var(--accent);width:100%;justify-content:center;margin-top:12px;}
   .btn-add:hover{background:rgba(59,130,246,.2);}
   .admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
@@ -288,28 +288,31 @@
 
 <script type="module">
 // ═══════════════════════════════════════════════════════════
-//  Firebase setup
+//  Firebase Imports (CDN)
 // ═══════════════════════════════════════════════════════════
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import { getFirestore, collection, doc, getDoc,
+         getDocs, setDoc, addDoc, writeBatch,
+         query, orderBy }
+  from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// ═══════════════════════════════════════════════════════════
+//  Firebase Config
+// ═══════════════════════════════════════════════════════════
 const firebaseConfig = {
-  apiKey: "AIzaSyB3qLHnfgcvCa_MWI5ilaCnB6DQgx2_YtU",
-  authDomain: "project-80f89009-5226-4604-90d.firebaseapp.com",
-  projectId: "project-80f89009-5226-4604-90d",
-  storageBucket: "project-80f89009-5226-4604-90d.firebasestorage.app",
-  messagingSenderId: "887946900568",
-  appId: "1:887946900568:web:16a1c2290f51512d2b062d",
-  measurementId: "G-W12DYRFBGY"
+  apiKey:            "AIzaSyBxaLoYyw0oa17isuWnPFckUtl2mmvKUCE",
+  authDomain:        "project-4698821164569783235.firebaseapp.com",
+  projectId:         "project-4698821164569783235",
+  storageBucket:     "project-4698821164569783235.firebasestorage.app",
+  messagingSenderId: "999988406776",
+  appId:             "1:999988406776:web:14f914304b81b025648e0d",
+  measurementId:     "G-SSQQ1WEKDK"
 };
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
+const app        = initializeApp(firebaseConfig);
+const db         = getFirestore(app);
+const CONFIG_REF = doc(db, "config", "main");
 
 // ═══════════════════════════════════════════════════════════
 //  In-memory state
@@ -333,9 +336,9 @@ async function loadAll(){
     } else {
       await setDoc(CONFIG_REF,{pin:"1980",subjects:[]});
     }
-    const q    = query(collection(db,"responses"), orderBy("ts","desc"));
+    const q     = query(collection(db,"responses"), orderBy("ts","desc"));
     const snap2 = await getDocs(q);
-    _responses = snap2.docs.map(d=>({id:d.id,...d.data()}));
+    _responses  = snap2.docs.map(d=>({id:d.id,...d.data()}));
   } catch(e){
     console.error(e);
     showToast("خطأ في الاتصال بـ Firebase","error");
@@ -379,7 +382,6 @@ window.handlePinKey = e=>{ if(e.key==="Enter") window.checkPin(); };
 
 window.checkPin = async ()=>{
   const entered=["p1","p2","p3","p4"].map(i=>document.getElementById(i).value).join("");
-  // re-read from Firestore for latest pin
   try{
     const s=await getDoc(CONFIG_REF);
     if(s.exists()) _pin=s.data().pin||"1980";
