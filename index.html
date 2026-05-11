@@ -27,6 +27,16 @@
   .admin-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);padding:8px 16px;
     border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;transition:all .2s;}
   .admin-toggle:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* ── MAIN NAV ── */
+  .main-nav{display:flex;gap:0;background:rgba(17,24,39,.9);border-bottom:1px solid var(--border);
+    padding:0 32px;position:sticky;top:65px;z-index:99;}
+  .main-nav-btn{padding:14px 22px;border:none;background:transparent;color:var(--muted);cursor:pointer;
+    font-family:'Cairo',sans-serif;font-size:14px;font-weight:600;border-bottom:3px solid transparent;
+    transition:all .2s;display:flex;align-items:center;gap:6px;}
+  .main-nav-btn:hover{color:var(--text);}
+  .main-nav-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+
   .view{display:none;padding:40px 32px;max-width:1000px;margin:0 auto;}
   .view.active{display:block;animation:fadeIn .3s ease;}
   @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -163,17 +173,53 @@
     background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:9998;}
   #saving-bar.show{display:block;}
 
-  /* exam type badge in breadcrumb */
   .exam-badge{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:4px;}
-  .exam-badge.practical{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);}
-  .exam-badge.oral{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--accent2);}
-  .exam-badge.hospital{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--success);}
-
-  /* exam type badge in response card */
+  .exam-badge.practical,.resp-exam-badge.practical{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);}
+  .exam-badge.oral,.resp-exam-badge.oral{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--accent2);}
+  .exam-badge.hospital,.resp-exam-badge.hospital{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--success);}
   .resp-exam-badge{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
-  .resp-exam-badge.practical{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);}
-  .resp-exam-badge.oral{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--accent2);}
-  .resp-exam-badge.hospital{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--success);}
+
+  /* ── BROWSE VIEW ── */
+  .browse-hero{text-align:center;margin-bottom:32px;padding:32px 20px 16px;}
+  .browse-hero h1{font-family:'Tajawal',sans-serif;font-size:28px;font-weight:900;margin-bottom:6px;
+    background:linear-gradient(135deg,var(--gold),#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .browse-hero p{color:var(--muted);font-size:14px;}
+
+  /* exam type quick-filter chips */
+  .exam-chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+  .exam-chip{padding:8px 18px;border-radius:24px;border:2px solid var(--border);background:var(--card);
+    color:var(--muted);font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
+  .exam-chip:hover{border-color:var(--accent);color:var(--text);}
+  .exam-chip.chip-all.active{border-color:var(--accent);background:rgba(59,130,246,.1);color:var(--accent);}
+  .exam-chip.chip-practical.active{border-color:var(--accent);background:rgba(59,130,246,.1);color:var(--accent);}
+  .exam-chip.chip-oral.active{border-color:var(--accent2);background:rgba(139,92,246,.1);color:var(--accent2);}
+  .exam-chip.chip-hospital.active{border-color:var(--success);background:rgba(16,185,129,.1);color:var(--success);}
+
+  .browse-filters{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+  .browse-filters .form-group{flex:1;min-width:180px;margin-bottom:0;}
+  .browse-stats{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap;}
+  .browse-count-badge{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:var(--accent);
+    padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;}
+  .browse-refresh{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 14px;
+    border-radius:20px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Cairo',sans-serif;}
+  .browse-refresh:hover{border-color:var(--accent);color:var(--accent);}
+  .browse-response-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+    padding:20px 22px;margin-bottom:14px;transition:border-color .2s,transform .15s;}
+  .browse-response-card:hover{border-color:rgba(59,130,246,.35);transform:translateY(-1px);}
+  .browse-card-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .meta-badge{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
+  .meta-subject{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);}
+  .meta-doctor{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--accent2);}
+  .browse-card-text{font-size:15px;line-height:1.8;color:var(--text);}
+  .browse-card-time{font-size:11px;color:var(--muted);margin-top:10px;display:block;}
+  .browse-group-header{font-family:'Tajawal',sans-serif;font-size:16px;font-weight:800;
+    color:var(--accent);margin:28px 0 14px;display:flex;align-items:center;gap:8px;
+    padding-bottom:10px;border-bottom:1px solid var(--border);}
+  .browse-group-count{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.25);
+    color:var(--accent);padding:2px 10px;border-radius:20px;font-size:12px;}
+  .loading-responses{text-align:center;padding:48px;color:var(--muted);}
+  .loading-responses .spin{display:inline-block;width:32px;height:32px;border:3px solid var(--border);
+    border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:12px;}
 
   @media(max-width:600px){
     header{padding:14px 20px;} .view{padding:24px 16px;}
@@ -181,6 +227,10 @@
     .subjects-selector{grid-template-columns:repeat(2,1fr);}
     .stats-bar{grid-template-columns:repeat(2,1fr);}
     .subject-header{flex-direction:column;align-items:flex-start;}
+    .main-nav{padding:0 16px;}
+    .main-nav-btn{padding:12px 14px;font-size:13px;}
+    .browse-filters{flex-direction:column;}
+    .exam-chips{gap:8px;}
   }
 </style>
 </head>
@@ -193,15 +243,22 @@
 <div id="saving-bar"></div>
 
 <header>
-  <div class="logo">📋  FOP1  أسئلة نسا وجراحة</div>
+  <div class="logo">📋 FOP1 أسئلة نسا وجراحة</div>
   <div class="header-actions">
     <div class="cloud-badge"><div class="dot"></div>Firebase</div>
     <button class="admin-toggle" onclick="showAdminGate()">⚙️ المشرف</button>
   </div>
 </header>
+
+<!-- MAIN NAV -->
+<nav class="main-nav">
+  <button class="main-nav-btn active" id="nav-submit" onclick="switchMainView('view-student',this)">✍️ أرسل سؤال</button>
+  <button class="main-nav-btn" id="nav-browse" onclick="switchMainView('view-browse',this)">📖 تصفح الأسئلة</button>
+</nav>
+
 <div id="toast"></div>
 
-<!-- STUDENT -->
+<!-- STUDENT SUBMIT -->
 <div id="view-student" class="view active">
   <div class="student-hero">
     <h1>شاركنا </h1>
@@ -209,8 +266,6 @@
     <p>الـــصــــيـــــاد ماتنساش تدعي لجدّي بالرحمة</p>
   </div>
   <div id="survey-form">
-
-    <!-- STEP 0: Exam Type -->
     <div class="step-label"><span class="step-num">1</span> اختر نوع الامتحان</div>
     <div class="exam-type-grid">
       <button class="exam-type-btn type-practical" onclick="selectExamType('practical','🔬 عملي',this)">
@@ -223,22 +278,16 @@
         <span class="exam-icon">🏥</span>مستشفى
       </button>
     </div>
-
-    <!-- STEP 1: Subject (was step 1, now step 2) -->
     <div id="step1" style="display:none">
       <div class="section-divider"></div>
       <div class="step-label"><span class="step-num">2</span> اختر المادة</div>
       <div class="subjects-selector" id="student-subjects"></div>
     </div>
-
-    <!-- STEP 2: Doctor -->
     <div id="step2" style="display:none">
       <div class="section-divider"></div>
       <div class="step-label"><span class="step-num">3</span> اختر الدكتور</div>
       <div class="doctors-selector" id="student-doctors"></div>
     </div>
-
-    <!-- STEP 3: Text -->
     <div id="step3" style="display:none">
       <div class="section-divider"></div>
       <div class="step-label"><span class="step-num">4</span> اكتب ملاحظتك</div>
@@ -249,13 +298,52 @@
         <button class="btn-submit" onclick="submitFeedback()">إرسال ✓</button>
       </div>
     </div>
-
   </div>
   <div class="success-msg" id="success-msg">
     <span class="icon">🎉</span>
     <h3>شكراً على مشاركتك!</h3>
     <p>تم تسجيل إجابتك على السحابة ✓</p><br>
     <button class="btn btn-ghost" onclick="resetForm()" style="margin:auto;display:block;">إرسال إجابة أخرى</button>
+  </div>
+</div>
+
+<!-- BROWSE VIEW (read-only) -->
+<div id="view-browse" class="view">
+  <div class="browse-hero">
+    <h1>📖 تصفح الأسئلة</h1>
+    <p>اقرأ كل الأسئلة المسجلة — فلتر حسب نوع الامتحان أو المادة أو الدكتور</p>
+  </div>
+
+  <!-- Quick exam type chips -->
+  <div class="exam-chips">
+    <button class="exam-chip chip-all active"      id="chip-all"      onclick="setChip('',this)">📋 الكل</button>
+    <button class="exam-chip chip-practical"       id="chip-practical" onclick="setChip('practical',this)">🔬 عملي</button>
+    <button class="exam-chip chip-oral"            id="chip-oral"      onclick="setChip('oral',this)">🎤 شفوي</button>
+    <button class="exam-chip chip-hospital"        id="chip-hospital"  onclick="setChip('hospital',this)">🏥 مستشفى</button>
+  </div>
+
+  <div class="browse-filters">
+    <div class="form-group">
+      <label>المادة</label>
+      <select id="browse-filter-subject" onchange="onBrowseSubjectChange()">
+        <option value="">كل المواد</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>الدكتور</label>
+      <select id="browse-filter-doctor" onchange="renderBrowse()">
+        <option value="">كل الدكاترة</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="browse-stats">
+    <span class="browse-count-badge" id="browse-count-badge">0 سؤال</span>
+    <button class="browse-refresh" onclick="reloadAndBrowse()">🔄 تحديث</button>
+  </div>
+
+  <div id="browse-area">
+    <div class="loading-responses"><div class="spin"></div><br>جاري التحميل...</div>
   </div>
 </div>
 
@@ -358,9 +446,6 @@
 </div>
 
 <script type="module">
-// ═══════════════════════════════════════════════════════════
-//  Firebase setup
-// ═══════════════════════════════════════════════════════════
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getFirestore, doc, getDoc, setDoc,
@@ -379,114 +464,79 @@ const app = initializeApp({
 const db         = getFirestore(app);
 const CONFIG_REF = doc(db, "config", "main");
 
-// ═══════════════════════════════════════════════════════════
-//  In-memory state
-// ═══════════════════════════════════════════════════════════
 let _subjects  = [];
 let _responses = [];
 let _pin       = "1980";
 
-// exam type labels
-const EXAM_LABELS = {
-  practical: '🔬 عملي',
-  oral:      '🎤 شفوي',
-  hospital:  '🏥 مستشفى'
-};
-const EXAM_CLASS = {
-  practical: 'practical',
-  oral:      'oral',
-  hospital:  'hospital'
-};
+const EXAM_LABELS = { practical:'🔬 عملي', oral:'🎤 شفوي', hospital:'🏥 مستشفى' };
+const EXAM_CLASS  = { practical:'practical', oral:'oral', hospital:'hospital' };
 
-// ═══════════════════════════════════════════════════════════
-//  Firebase helpers
-// ═══════════════════════════════════════════════════════════
+// ── active browse exam-type chip ──
+let _browseExamType = "";
+
 function bar(on){ document.getElementById("saving-bar").classList.toggle("show",on); }
 
 async function loadAll(){
   bar(true);
   try {
     const snap = await getDoc(CONFIG_REF);
-    if(snap.exists()){
-      _subjects = snap.data().subjects || [];
-      _pin      = snap.data().pin      || "1980";
-    } else {
-      await setDoc(CONFIG_REF,{pin:"1980",subjects:[]});
-    }
-    const q    = query(collection(db,"responses"), orderBy("ts","desc"));
-    const snap2 = await getDocs(q);
+    if(snap.exists()){ _subjects=snap.data().subjects||[]; _pin=snap.data().pin||"1980"; }
+    else { await setDoc(CONFIG_REF,{pin:"1980",subjects:[]}); }
+    const snap2 = await getDocs(query(collection(db,"responses"),orderBy("ts","desc")));
     _responses = snap2.docs.map(d=>({id:d.id,...d.data()}));
-  } catch(e){
-    console.error(e);
-    showToast("خطأ في الاتصال بـ Firebase","error");
-  }
+  } catch(e){ console.error(e); showToast("خطأ في الاتصال بـ Firebase","error"); }
   bar(false);
 }
 
-async function saveConfig(){
-  bar(true);
-  await setDoc(CONFIG_REF,{pin:_pin, subjects:_subjects});
-  bar(false);
-}
+async function saveConfig(){ bar(true); await setDoc(CONFIG_REF,{pin:_pin,subjects:_subjects}); bar(false); }
 
-// ═══════════════════════════════════════════════════════════
-//  Toast
-// ═══════════════════════════════════════════════════════════
-function showToast(msg, type="success"){
+function showToast(msg,type="success"){
   const t=document.getElementById("toast");
   t.textContent=msg; t.className="show "+type;
   clearTimeout(t._t); t._t=setTimeout(()=>t.className="",2800);
 }
-window.showToast = showToast;
+window.showToast=showToast;
 
-// ═══════════════════════════════════════════════════════════
-//  Views
-// ═══════════════════════════════════════════════════════════
+// ── Main nav ──
+window.switchMainView=(viewId,btn)=>{
+  ["view-student","view-browse"].forEach(id=>document.getElementById(id).classList.remove("active"));
+  document.querySelectorAll(".main-nav-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById(viewId).classList.add("active");
+  btn.classList.add("active");
+  if(viewId==="view-browse"){ populateBrowseFilters(); renderBrowse(); }
+};
+
 function showView(id){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
   document.getElementById(id).classList.add("active");
+  if(id==="view-student"){
+    document.querySelectorAll(".main-nav-btn").forEach(b=>b.classList.remove("active"));
+    document.getElementById("nav-submit").classList.add("active");
+  }
 }
-window.showView = showView;
+window.showView=showView;
 
-window.showAdminGate = ()=>{
+window.showAdminGate=()=>{
   ["p1","p2","p3","p4"].forEach(i=>document.getElementById(i).value="");
   showView("view-admin-gate");
   setTimeout(()=>document.getElementById("p1").focus(),60);
 };
-
-window.moveFocus    = (el,next)=>{ if(el.value&&next) document.getElementById(next).focus(); };
-window.handlePinKey = e=>{ if(e.key==="Enter") window.checkPin(); };
-
-window.checkPin = async ()=>{
+window.moveFocus=(el,next)=>{ if(el.value&&next) document.getElementById(next).focus(); };
+window.handlePinKey=e=>{ if(e.key==="Enter") window.checkPin(); };
+window.checkPin=async()=>{
   const entered=["p1","p2","p3","p4"].map(i=>document.getElementById(i).value).join("");
-  try{
-    const s=await getDoc(CONFIG_REF);
-    if(s.exists()) _pin=s.data().pin||"1980";
-  }catch(e){}
-  if(entered===_pin){
-    showView("view-admin");
-    renderAdmin();
-  } else {
-    showToast("رمز PIN غير صحيح","error");
-    ["p1","p2","p3","p4"].forEach(i=>document.getElementById(i).value="");
-    setTimeout(()=>document.getElementById("p1").focus(),60);
-  }
+  try{ const s=await getDoc(CONFIG_REF); if(s.exists()) _pin=s.data().pin||"1980"; }catch(e){}
+  if(entered===_pin){ showView("view-admin"); renderAdmin(); }
+  else{ showToast("رمز PIN غير صحيح","error"); ["p1","p2","p3","p4"].forEach(i=>document.getElementById(i).value=""); setTimeout(()=>document.getElementById("p1").focus(),60); }
 };
 
-// ═══════════════════════════════════════════════════════════
-//  Tabs
-// ═══════════════════════════════════════════════════════════
-window.switchTab = (tabId,btn)=>{
+window.switchTab=(tabId,btn)=>{
   document.querySelectorAll(".tab-content").forEach(t=>t.style.display="none");
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  document.getElementById(tabId).style.display="block";
-  btn.classList.add("active");
+  document.getElementById(tabId).style.display="block"; btn.classList.add("active");
   if(tabId==="tab-responses"){ populateFilters(); renderResponses(); }
 };
 
-// ═══════════════════════════════════════════════════════════
-//  Admin panel
-// ═══════════════════════════════════════════════════════════
 function renderAdmin(){
   document.getElementById("admin-stats").innerHTML=`
     <div class="stat-card"><div class="num">${_subjects.length}</div><div class="lbl">مادة</div></div>
@@ -502,218 +552,191 @@ function renderAdmin(){
     const cnt=_responses.filter(r=>r.subjectId===sub.id).length;
     return `<div class="subject-card">
       <div class="subject-header">
-        <div style="display:flex;align-items:center;gap:10px;flex:1">
-          <span style="font-size:22px">${sub.icon||'📚'}</span>
-          <span class="subject-name-display">${sub.name}</span>
-        </div>
-        <div class="subject-actions">
-          <span style="font-size:12px;color:var(--muted)">${cnt} إجابة</span>
+        <div style="display:flex;align-items:center;gap:10px;flex:1"><span style="font-size:22px">${sub.icon||'📚'}</span><span class="subject-name-display">${sub.name}</span></div>
+        <div class="subject-actions"><span style="font-size:12px;color:var(--muted)">${cnt} إجابة</span>
           <button class="btn btn-success" onclick="openAddDoctor('${sub.id}')">+ دكتور</button>
-          <button class="btn btn-danger"  onclick="deleteSubject('${sub.id}')">حذف</button>
-        </div>
+          <button class="btn btn-danger"  onclick="deleteSubject('${sub.id}')">حذف</button></div>
       </div>
-      <div class="doctors-list">
-        ${sub.doctors.length===0
-          ?'<div style="color:var(--muted);font-size:13px;text-align:center;padding:8px">لا يوجد دكاترة — اضغط "+ دكتور"</div>'
-          :sub.doctors.map(d=>{
-            const dc=_responses.filter(r=>r.subjectId===sub.id&&r.doctorId===d.id).length;
-            return `<div class="doctor-row">
-              <span class="doctor-name-display">👤 ${d.name}</span>
-              <span class="doctor-response-count">${dc} إجابة</span>
-              <button class="btn btn-danger" onclick="deleteDoctor('${sub.id}','${d.id}')">حذف</button>
-            </div>`;
-          }).join('')
-        }
-      </div>
-    </div>`;
+      <div class="doctors-list">${sub.doctors.length===0
+        ?'<div style="color:var(--muted);font-size:13px;text-align:center;padding:8px">لا يوجد دكاترة — اضغط "+ دكتور"</div>'
+        :sub.doctors.map(d=>{
+          const dc=_responses.filter(r=>r.subjectId===sub.id&&r.doctorId===d.id).length;
+          return `<div class="doctor-row"><span class="doctor-name-display">👤 ${d.name}</span>
+            <span class="doctor-response-count">${dc} إجابة</span>
+            <button class="btn btn-danger" onclick="deleteDoctor('${sub.id}','${d.id}')">حذف</button></div>`;
+        }).join('')}</div></div>`;
   }).join("");
 }
 
-window.reloadAll = async ()=>{
-  showToast("جاري التحديث...","success");
-  await loadAll();
-  renderAdmin();
-  renderStudentView();
-};
+window.reloadAll=async()=>{ showToast("جاري التحديث...","success"); await loadAll(); renderAdmin(); };
 
-// ═══════════════════════════════════════════════════════════
-//  Add / Delete subjects & doctors
-// ═══════════════════════════════════════════════════════════
-window.openAddSubject = ()=>{
-  document.getElementById("new-subject-name").value="";
-  document.getElementById("new-subject-icon").value="📚";
-  document.getElementById("modal-subject").classList.add("open");
-  setTimeout(()=>document.getElementById("new-subject-name").focus(),100);
+window.openAddSubject=()=>{
+  document.getElementById("new-subject-name").value=""; document.getElementById("new-subject-icon").value="📚";
+  document.getElementById("modal-subject").classList.add("open"); setTimeout(()=>document.getElementById("new-subject-name").focus(),100);
 };
-window.addSubject = async ()=>{
-  const name=document.getElementById("new-subject-name").value.trim();
-  const icon=document.getElementById("new-subject-icon").value.trim()||"📚";
+window.addSubject=async()=>{
+  const name=document.getElementById("new-subject-name").value.trim(); const icon=document.getElementById("new-subject-icon").value.trim()||"📚";
   if(!name) return showToast("اكتب اسم المادة","error");
   _subjects.push({id:"sub_"+Date.now(),name,icon,doctors:[]});
-  await saveConfig();
-  closeModal("modal-subject");
-  renderAdmin(); renderStudentView();
-  showToast("تمت إضافة المادة ✓");
+  await saveConfig(); closeModal("modal-subject"); renderAdmin(); showToast("تمت إضافة المادة ✓");
 };
-window.deleteSubject = async subId=>{
+window.deleteSubject=async subId=>{
   if(!confirm("حذف هذه المادة وكل بياناتها؟")) return;
   _subjects=_subjects.filter(s=>s.id!==subId);
   const toDelete=_responses.filter(r=>r.subjectId===subId);
-  if(toDelete.length){
-    const batch=writeBatch(db);
-    toDelete.forEach(r=>batch.delete(doc(db,"responses",r.id)));
-    await batch.commit();
-    _responses=_responses.filter(r=>r.subjectId!==subId);
-  }
-  await saveConfig();
-  renderAdmin(); renderStudentView();
-  showToast("تم الحذف");
+  if(toDelete.length){ const batch=writeBatch(db); toDelete.forEach(r=>batch.delete(doc(db,"responses",r.id))); await batch.commit(); _responses=_responses.filter(r=>r.subjectId!==subId); }
+  await saveConfig(); renderAdmin(); showToast("تم الحذف");
 };
-window.openAddDoctor = subId=>{
-  document.getElementById("doctor-subject-id").value=subId;
-  document.getElementById("new-doctor-name").value="";
-  document.getElementById("modal-doctor").classList.add("open");
-  setTimeout(()=>document.getElementById("new-doctor-name").focus(),100);
+window.openAddDoctor=subId=>{
+  document.getElementById("doctor-subject-id").value=subId; document.getElementById("new-doctor-name").value="";
+  document.getElementById("modal-doctor").classList.add("open"); setTimeout(()=>document.getElementById("new-doctor-name").focus(),100);
 };
-window.addDoctor = async ()=>{
-  const name=document.getElementById("new-doctor-name").value.trim();
-  const subId=document.getElementById("doctor-subject-id").value;
+window.addDoctor=async()=>{
+  const name=document.getElementById("new-doctor-name").value.trim(); const subId=document.getElementById("doctor-subject-id").value;
   if(!name) return showToast("اكتب اسم الدكتور","error");
-  const sub=_subjects.find(s=>s.id===subId);
-  if(!sub) return;
-  sub.doctors.push({id:"doc_"+Date.now(),name});
-  await saveConfig();
-  closeModal("modal-doctor");
-  renderAdmin(); renderStudentView();
-  showToast("تمت إضافة الدكتور ✓");
+  const sub=_subjects.find(s=>s.id===subId); if(!sub) return;
+  sub.doctors.push({id:"doc_"+Date.now(),name}); await saveConfig(); closeModal("modal-doctor"); renderAdmin(); showToast("تمت إضافة الدكتور ✓");
 };
-window.deleteDoctor = async (subId,docId)=>{
+window.deleteDoctor=async(subId,docId)=>{
   if(!confirm("حذف هذا الدكتور؟")) return;
-  const sub=_subjects.find(s=>s.id===subId);
-  if(sub) sub.doctors=sub.doctors.filter(d=>d.id!==docId);
+  const sub=_subjects.find(s=>s.id===subId); if(sub) sub.doctors=sub.doctors.filter(d=>d.id!==docId);
   const toDelete=_responses.filter(r=>r.subjectId===subId&&r.doctorId===docId);
-  if(toDelete.length){
-    const batch=writeBatch(db);
-    toDelete.forEach(r=>batch.delete(doc(db,"responses",r.id)));
-    await batch.commit();
-    _responses=_responses.filter(r=>!(r.subjectId===subId&&r.doctorId===docId));
-  }
-  await saveConfig();
-  renderAdmin(); renderStudentView();
-  showToast("تم الحذف");
+  if(toDelete.length){ const batch=writeBatch(db); toDelete.forEach(r=>batch.delete(doc(db,"responses",r.id))); await batch.commit(); _responses=_responses.filter(r=>!(r.subjectId===subId&&r.doctorId===docId)); }
+  await saveConfig(); renderAdmin(); showToast("تم الحذف");
 };
-window.closeModal = id=>document.getElementById(id).classList.remove("open");
-document.querySelectorAll(".modal-overlay").forEach(el=>
-  el.addEventListener("click",e=>{if(e.target===el)el.classList.remove("open");}));
+window.closeModal=id=>document.getElementById(id).classList.remove("open");
+document.querySelectorAll(".modal-overlay").forEach(el=>el.addEventListener("click",e=>{if(e.target===el)el.classList.remove("open");}));
 
-// ═══════════════════════════════════════════════════════════
-//  Responses
-// ═══════════════════════════════════════════════════════════
 function populateFilters(){
-  const fSub=document.getElementById("filter-subject");
-  const fDoc=document.getElementById("filter-doctor");
-  const prev=fSub.value;
-  fSub.innerHTML='<option value="">كل المواد</option>'+
-    _subjects.map(s=>`<option value="${s.id}">${s.icon} ${s.name}</option>`).join("");
-  fSub.value=prev;
-  const sel=_subjects.find(s=>s.id===fSub.value);
-  const docs=sel?sel.doctors:_subjects.flatMap(s=>s.doctors);
-  fDoc.innerHTML='<option value="">كل الدكاترة</option>'+
-    docs.map(d=>`<option value="${d.id}">${d.name}</option>`).join("");
+  const fSub=document.getElementById("filter-subject"),fDoc=document.getElementById("filter-doctor"),prev=fSub.value;
+  fSub.innerHTML='<option value="">كل المواد</option>'+_subjects.map(s=>`<option value="${s.id}">${s.icon} ${s.name}</option>`).join(""); fSub.value=prev;
+  const sel=_subjects.find(s=>s.id===fSub.value); const docs=sel?sel.doctors:_subjects.flatMap(s=>s.doctors);
+  fDoc.innerHTML='<option value="">كل الدكاترة</option>'+docs.map(d=>`<option value="${d.id}">${d.name}</option>`).join("");
 }
-window.populateFilterDropdowns = populateFilters;
+window.populateFilterDropdowns=populateFilters;
 
 function renderResponses(){
-  const ef=document.getElementById("filter-examtype").value;
-  const sf=document.getElementById("filter-subject").value;
-  const df=document.getElementById("filter-doctor").value;
-  let resp=[..._responses];
-  if(ef) resp=resp.filter(r=>r.examType===ef);
-  if(sf) resp=resp.filter(r=>r.subjectId===sf);
-  if(df) resp=resp.filter(r=>r.doctorId===df);
+  const ef=document.getElementById("filter-examtype").value, sf=document.getElementById("filter-subject").value, df=document.getElementById("filter-doctor").value;
+  let resp=[..._responses]; if(ef) resp=resp.filter(r=>r.examType===ef); if(sf) resp=resp.filter(r=>r.subjectId===sf); if(df) resp=resp.filter(r=>r.doctorId===df);
   const area=document.getElementById("responses-area");
   if(!resp.length){ area.innerHTML='<div class="empty"><span class="icon">📭</span>لا توجد إجابات</div>'; return; }
-  area.innerHTML=`<div class="export-bar">
-    <span>إجمالي الإجابات: <strong>${resp.length}</strong></span>
-    <button class="btn btn-success" onclick="exportCSV()">⬇️ تصدير CSV</button>
-  </div>`+resp.map(r=>{
-    const sub=_subjects.find(s=>s.id===r.subjectId);
-    const d=sub?.doctors.find(d=>d.id===r.doctorId);
-    const ts=r.ts ? new Date(r.ts.seconds?r.ts.seconds*1000:r.ts).toLocaleString('ar-EG') : '';
-    const examLabel=EXAM_LABELS[r.examType]||r.examType||'—';
-    const examCls=EXAM_CLASS[r.examType]||'';
-    return `<div class="response-card">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-        <span class="resp-exam-badge ${examCls}">${examLabel}</span>
-        <span style="background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">${sub?.icon||''} ${sub?.name||'مادة محذوفة'}</span>
-        <span style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--accent2);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">👤 ${d?.name||'دكتور محذوف'}</span>
-      </div>
-      <div style="font-size:15px;line-height:1.7">${r.text.replace(/\n/g,'<br>')}</div>
-      <span class="response-time">${ts}</span>
-    </div>`;
-  }).join("");
+  area.innerHTML=`<div class="export-bar"><span>إجمالي الإجابات: <strong>${resp.length}</strong></span><button class="btn btn-success" onclick="exportCSV()">⬇️ تصدير CSV</button></div>`
+    +resp.map(r=>{
+      const sub=_subjects.find(s=>s.id===r.subjectId),d=sub?.doctors.find(d=>d.id===r.doctorId);
+      const ts=r.ts?new Date(r.ts.seconds?r.ts.seconds*1000:r.ts).toLocaleString('ar-EG'):'';
+      return `<div class="response-card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+          <span class="resp-exam-badge ${EXAM_CLASS[r.examType]||''}">${EXAM_LABELS[r.examType]||r.examType||'—'}</span>
+          <span style="background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">${sub?.icon||''} ${sub?.name||'مادة محذوفة'}</span>
+          <span style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:var(--accent2);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">👤 ${d?.name||'دكتور محذوف'}</span>
+        </div>
+        <div style="font-size:15px;line-height:1.7">${r.text.replace(/\n/g,'<br>')}</div>
+        <span class="response-time">${ts}</span></div>`;
+    }).join("");
 }
-window.renderResponses = renderResponses;
+window.renderResponses=renderResponses;
 
-window.exportCSV = ()=>{
-  const ef=document.getElementById("filter-examtype").value;
-  const sf=document.getElementById("filter-subject").value;
-  const df=document.getElementById("filter-doctor").value;
+window.exportCSV=()=>{
+  const ef=document.getElementById("filter-examtype").value,sf=document.getElementById("filter-subject").value,df=document.getElementById("filter-doctor").value;
+  let resp=[..._responses]; if(ef) resp=resp.filter(r=>r.examType===ef); if(sf) resp=resp.filter(r=>r.subjectId===sf); if(df) resp=resp.filter(r=>r.doctorId===df);
+  const rows=[['نوع الامتحان','المادة','الدكتور','الإجابة','التاريخ']];
+  resp.forEach(r=>{ const sub=_subjects.find(s=>s.id===r.subjectId),d=sub?.doctors.find(d=>d.id===r.doctorId); const ts=r.ts?new Date(r.ts.seconds?r.ts.seconds*1000:r.ts).toLocaleString('ar-EG'):''; rows.push([EXAM_LABELS[r.examType]||'—',sub?.name||'—',d?.name||'—',r.text.replace(/,/g,'،').replace(/\n/g,' '),ts]); });
+  const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),download:'نتائج_الموقع.csv'}).click();
+  showToast('تم التصدير ✓');
+};
+
+window.changePin=async()=>{
+  const cur=document.getElementById("current-pin").value,np=document.getElementById("new-pin").value,cp=document.getElementById("confirm-pin").value;
+  if(cur!==_pin) return showToast("الرمز الحالي غير صحيح","error");
+  if(np.length<4) return showToast("الرمز يجب أن يكون 4 أرقام","error");
+  if(np!==cp) return showToast("الرمزان لا يتطابقان","error");
+  _pin=np; await saveConfig(); ["current-pin","new-pin","confirm-pin"].forEach(i=>document.getElementById(i).value=""); showToast("تم تغيير الرمز ✓");
+};
+window.confirmClearAll=async()=>{
+  if(!confirm("مسح كل الإجابات نهائياً؟")) return;
+  const batch=writeBatch(db); _responses.forEach(r=>batch.delete(doc(db,"responses",r.id))); await batch.commit(); _responses=[]; renderAdmin(); showToast("تم المسح");
+};
+
+// ═══ BROWSE VIEW ═══
+function populateBrowseFilters(){
+  const fSub=document.getElementById("browse-filter-subject"),fDoc=document.getElementById("browse-filter-doctor"),prev=fSub.value;
+  fSub.innerHTML='<option value="">كل المواد</option>'+_subjects.map(s=>`<option value="${s.id}">${s.icon||''} ${s.name}</option>`).join(""); fSub.value=prev;
+  const sel=_subjects.find(s=>s.id===fSub.value); const docs=sel?sel.doctors:_subjects.flatMap(s=>s.doctors);
+  fDoc.innerHTML='<option value="">كل الدكاترة</option>'+docs.map(d=>`<option value="${d.id}">${d.name}</option>`).join("");
+}
+
+window.onBrowseSubjectChange=()=>{
+  const fSub=document.getElementById("browse-filter-subject"),fDoc=document.getElementById("browse-filter-doctor");
+  const sel=_subjects.find(s=>s.id===fSub.value); const docs=sel?sel.doctors:_subjects.flatMap(s=>s.doctors);
+  fDoc.innerHTML='<option value="">كل الدكاترة</option>'+docs.map(d=>`<option value="${d.id}">${d.name}</option>`).join("");
+  renderBrowse();
+};
+
+// chip click
+window.setChip=(type,btn)=>{
+  _browseExamType=type;
+  document.querySelectorAll(".exam-chip").forEach(c=>c.classList.remove("active"));
+  btn.classList.add("active");
+  renderBrowse();
+};
+
+function renderBrowse(){
+  const sf=document.getElementById("browse-filter-subject").value;
+  const df=document.getElementById("browse-filter-doctor").value;
   let resp=[..._responses];
-  if(ef) resp=resp.filter(r=>r.examType===ef);
+  if(_browseExamType) resp=resp.filter(r=>r.examType===_browseExamType);
   if(sf) resp=resp.filter(r=>r.subjectId===sf);
   if(df) resp=resp.filter(r=>r.doctorId===df);
-  const rows=[['نوع الامتحان','المادة','الدكتور','الإجابة','التاريخ']];
-  resp.forEach(r=>{
-    const sub=_subjects.find(s=>s.id===r.subjectId);
-    const d=sub?.doctors.find(d=>d.id===r.doctorId);
-    const ts=r.ts?new Date(r.ts.seconds?r.ts.seconds*1000:r.ts).toLocaleString('ar-EG'):'';
-    const examLabel=EXAM_LABELS[r.examType]||r.examType||'—';
-    rows.push([examLabel,sub?.name||'—',d?.name||'—',r.text.replace(/,/g,'،').replace(/\n/g,' '),ts]);
-  });
-  const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
-  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),download:'نتائج_الموقع.csv'});
-  a.click(); showToast('تم التصدير ✓');
+
+  document.getElementById("browse-count-badge").textContent=`${resp.length} سؤال`;
+  const area=document.getElementById("browse-area");
+  if(!resp.length){ area.innerHTML='<div class="empty"><span class="icon">📭</span>لا توجد أسئلة مسجلة حتى الآن</div>'; return; }
+
+  const grouped = !sf && !df && !_browseExamType;
+  if(grouped){
+    let html="";
+    for(const sub of _subjects){
+      const subResp=resp.filter(r=>r.subjectId===sub.id); if(!subResp.length) continue;
+      html+=`<div class="browse-group-header">${sub.icon||'📚'} ${sub.name} <span class="browse-group-count">${subResp.length}</span></div>`;
+      for(const d of sub.doctors){
+        const docResp=subResp.filter(r=>r.doctorId===d.id); if(!docResp.length) continue;
+        html+=`<div style="margin-right:16px;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px">
+            <span>👤 ${d.name}</span><span style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);padding:2px 8px;border-radius:12px;font-size:11px">${docResp.length}</span></div>`;
+        docResp.forEach(r=>{ html+=browseCard(r,sub,d,true); });
+        html+=`</div>`;
+      }
+    }
+    area.innerHTML=html||'<div class="empty"><span class="icon">📭</span>لا توجد أسئلة</div>';
+  } else {
+    area.innerHTML=resp.map(r=>{ const sub=_subjects.find(s=>s.id===r.subjectId),d=sub?.doctors.find(d=>d.id===r.doctorId); return browseCard(r,sub,d,true); }).join("");
+  }
+}
+
+function browseCard(r,sub,d,showMeta){
+  const ts=r.ts?new Date(r.ts.seconds?r.ts.seconds*1000:r.ts).toLocaleString('ar-EG'):'';
+  const examCls=EXAM_CLASS[r.examType]||''; const examLbl=EXAM_LABELS[r.examType]||'';
+  const metaHtml=showMeta?`<div class="browse-card-meta">
+    <span class="resp-exam-badge ${examCls}">${examLbl}</span>
+    <span class="meta-badge meta-subject">${sub?.icon||''} ${sub?.name||'مادة محذوفة'}</span>
+    <span class="meta-badge meta-doctor">👤 ${d?.name||'دكتور محذوف'}</span>
+  </div>`:'';
+  return `<div class="browse-response-card">${metaHtml}<div class="browse-card-text">${r.text.replace(/\n/g,'<br>')}</div><span class="browse-card-time">🕐 ${ts}</span></div>`;
+}
+
+window.renderBrowse=renderBrowse;
+window.reloadAndBrowse=async()=>{
+  document.getElementById("browse-area").innerHTML='<div class="loading-responses"><div class="spin"></div><br>جاري التحديث...</div>';
+  await loadAll(); populateBrowseFilters(); renderBrowse(); showToast("تم التحديث ✓");
 };
 
-// ═══════════════════════════════════════════════════════════
-//  Settings
-// ═══════════════════════════════════════════════════════════
-window.changePin = async ()=>{
-  const cur=document.getElementById("current-pin").value;
-  const np=document.getElementById("new-pin").value;
-  const cp=document.getElementById("confirm-pin").value;
-  if(cur!==_pin)   return showToast("الرمز الحالي غير صحيح","error");
-  if(np.length<4)  return showToast("الرمز يجب أن يكون 4 أرقام","error");
-  if(np!==cp)      return showToast("الرمزان لا يتطابقان","error");
-  _pin=np;
-  await saveConfig();
-  ["current-pin","new-pin","confirm-pin"].forEach(i=>document.getElementById(i).value="");
-  showToast("تم تغيير الرمز ✓");
-};
+// ═══ STUDENT SUBMIT ═══
+let selExamType=null,selExamLabel=null,selSubId=null,selDocId=null;
 
-window.confirmClearAll = async ()=>{
-  if(!confirm("مسح كل الإجابات نهائياً؟")) return;
-  const batch=writeBatch(db);
-  _responses.forEach(r=>batch.delete(doc(db,"responses",r.id)));
-  await batch.commit();
-  _responses=[];
-  renderAdmin();
-  showToast("تم المسح");
-};
-
-// ═══════════════════════════════════════════════════════════
-//  Student view
-// ═══════════════════════════════════════════════════════════
-let selExamType=null, selExamLabel=null;
-let selSubId=null, selDocId=null;
-
-// Step 0 — exam type
-window.selectExamType = (type, label, btn)=>{
-  selExamType=type; selExamLabel=label;
-  selSubId=null; selDocId=null;
-  document.querySelectorAll(".exam-type-btn").forEach(b=>b.classList.remove("selected"));
-  btn.classList.add("selected");
+window.selectExamType=(type,label,btn)=>{
+  selExamType=type; selExamLabel=label; selSubId=null; selDocId=null;
+  document.querySelectorAll(".exam-type-btn").forEach(b=>b.classList.remove("selected")); btn.classList.add("selected");
   document.getElementById("step1").style.display="block";
   document.getElementById("step2").style.display="none";
   document.getElementById("step3").style.display="none";
@@ -721,92 +744,56 @@ window.selectExamType = (type, label, btn)=>{
   document.getElementById("step1").scrollIntoView({behavior:"smooth",block:"nearest"});
 };
 
-function renderStudentView(){
-  // just reset; subjects rendered after exam type chosen
-  selExamType=null; selSubId=null; selDocId=null;
-  document.getElementById("step1").style.display="none";
-  document.getElementById("step2").style.display="none";
-  document.getElementById("step3").style.display="none";
-  document.querySelectorAll(".exam-type-btn").forEach(b=>b.classList.remove("selected"));
-}
-window.renderStudentView = renderStudentView;
-
 function renderStudentSubjects(){
   const c=document.getElementById("student-subjects");
-  if(!_subjects.length){
-    c.innerHTML='<div style="color:var(--muted);font-size:14px;padding:16px 0">لا توجد مواد بعد — انتظر المشرف.</div>';
-    return;
-  }
-  c.innerHTML=_subjects.map(s=>`
-    <button class="subject-btn ${selSubId===s.id?'selected':''}" onclick="selectSubject('${s.id}',this)">
-      <span class="subject-icon">${s.icon||'📚'}</span>${s.name}
-    </button>`).join("");
+  if(!_subjects.length){ c.innerHTML='<div style="color:var(--muted);font-size:14px;padding:16px 0">لا توجد مواد بعد — انتظر المشرف.</div>'; return; }
+  c.innerHTML=_subjects.map(s=>`<button class="subject-btn ${selSubId===s.id?'selected':''}" onclick="selectSubject('${s.id}',this)"><span class="subject-icon">${s.icon||'📚'}</span>${s.name}</button>`).join("");
 }
 
-window.selectSubject = (subId,btn)=>{
+window.selectSubject=(subId,btn)=>{
   selSubId=subId; selDocId=null;
-  document.querySelectorAll(".subject-btn").forEach(b=>b.classList.remove("selected"));
-  btn.classList.add("selected");
+  document.querySelectorAll(".subject-btn").forEach(b=>b.classList.remove("selected")); btn.classList.add("selected");
   const sub=_subjects.find(s=>s.id===subId);
-  document.getElementById("step2").style.display="block";
-  document.getElementById("step3").style.display="none";
+  document.getElementById("step2").style.display="block"; document.getElementById("step3").style.display="none";
   const dc=document.getElementById("student-doctors");
-  dc.innerHTML=(!sub||!sub.doctors.length)
-    ?'<div style="color:var(--muted);font-size:13px">لا يوجد دكاترة في هذه المادة</div>'
+  dc.innerHTML=(!sub||!sub.doctors.length)?'<div style="color:var(--muted);font-size:13px">لا يوجد دكاترة في هذه المادة</div>'
     :sub.doctors.map(d=>`<button class="doctor-btn" onclick="selectDoctor('${d.id}',this)">👤 ${d.name}</button>`).join("");
   document.getElementById("step2").scrollIntoView({behavior:"smooth",block:"nearest"});
 };
 
-window.selectDoctor = (docId,btn)=>{
+window.selectDoctor=(docId,btn)=>{
   selDocId=docId;
-  document.querySelectorAll(".doctor-btn").forEach(b=>b.classList.remove("selected"));
-  btn.classList.add("selected");
-  const sub=_subjects.find(s=>s.id===selSubId);
-  const d=sub?.doctors.find(d=>d.id===docId);
+  document.querySelectorAll(".doctor-btn").forEach(b=>b.classList.remove("selected")); btn.classList.add("selected");
+  const sub=_subjects.find(s=>s.id===selSubId),d=sub?.doctors.find(d=>d.id===docId);
   const examCls=EXAM_CLASS[selExamType]||'';
-  document.getElementById("breadcrumb-display").innerHTML=
-    `<span class="exam-badge ${examCls}">${selExamLabel||''}</span>
-     ${sub?.icon||''} <strong>${sub?.name}</strong> ← <span>👤 ${d?.name}</span>`;
-  document.getElementById("step3").style.display="block";
-  document.getElementById("student-feedback").value="";
+  document.getElementById("breadcrumb-display").innerHTML=`<span class="exam-badge ${examCls}">${selExamLabel||''}</span> ${sub?.icon||''} <strong>${sub?.name}</strong> ← <span>👤 ${d?.name}</span>`;
+  document.getElementById("step3").style.display="block"; document.getElementById("student-feedback").value="";
   document.getElementById("step3").scrollIntoView({behavior:"smooth",block:"nearest"});
 };
 
-window.submitFeedback = async ()=>{
+window.submitFeedback=async()=>{
   const text=document.getElementById("student-feedback").value.trim();
-  if(!selExamType)             return showToast("اختر نوع الامتحان أولاً","error");
-  if(!selSubId||!selDocId)     return showToast("اختر المادة والدكتور أولاً","error");
-  if(!text)                    return showToast("اكتب ملاحظتك أولاً","error");
+  if(!selExamType) return showToast("اختر نوع الامتحان أولاً","error");
+  if(!selSubId||!selDocId) return showToast("اختر المادة والدكتور أولاً","error");
+  if(!text) return showToast("اكتب ملاحظتك أولاً","error");
   bar(true);
   try{
-    const ref=await addDoc(collection(db,"responses"),{
-      examType:selExamType, subjectId:selSubId, doctorId:selDocId, text, ts:new Date()
-    });
+    const ref=await addDoc(collection(db,"responses"),{examType:selExamType,subjectId:selSubId,doctorId:selDocId,text,ts:new Date()});
     _responses.unshift({id:ref.id,examType:selExamType,subjectId:selSubId,doctorId:selDocId,text,ts:new Date()});
-    document.getElementById("survey-form").style.display="none";
-    document.getElementById("success-msg").style.display="block";
-  }catch(e){
-    showToast("خطأ في الإرسال — تحقق من الإنترنت","error");
-    console.error(e);
-  }
+    document.getElementById("survey-form").style.display="none"; document.getElementById("success-msg").style.display="block";
+  }catch(e){ showToast("خطأ في الإرسال — تحقق من الإنترنت","error"); console.error(e); }
   bar(false);
 };
 
-window.resetForm = ()=>{
+window.resetForm=()=>{
   selExamType=null; selSubId=null; selDocId=null;
-  document.getElementById("survey-form").style.display="block";
-  document.getElementById("success-msg").style.display="none";
-  document.getElementById("step1").style.display="none";
-  document.getElementById("step2").style.display="none";
-  document.getElementById("step3").style.display="none";
+  document.getElementById("survey-form").style.display="block"; document.getElementById("success-msg").style.display="none";
+  ["step1","step2","step3"].forEach(i=>document.getElementById(i).style.display="none");
   document.getElementById("student-feedback").value="";
   document.querySelectorAll(".exam-type-btn").forEach(b=>b.classList.remove("selected"));
   window.scrollTo({top:0,behavior:"smooth"});
 };
 
-// ═══════════════════════════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════════════════════════
 (async()=>{
   await loadAll();
   document.getElementById("loading-screen").style.display="none";
